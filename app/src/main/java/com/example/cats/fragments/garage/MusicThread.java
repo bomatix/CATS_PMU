@@ -38,6 +38,8 @@ public class MusicThread extends Thread {
     @Override
     public void run() {
         while(running){
+            songIndex = (int)(Math.random()*songs.size());
+            if(mediaPlayer != null) mediaPlayer.release();
             mediaPlayer = MediaPlayer.create(context, getResId(songs.get(songIndex), R.raw.class));
             mediaPlayer.setOnCompletionListener(new onCompletion());
             mediaPlayer.start();
@@ -50,6 +52,7 @@ public class MusicThread extends Thread {
             }
         }
         mediaPlayer.stop();
+        mediaPlayer.release();
     }
 
     class onCompletion implements MediaPlayer.OnCompletionListener {

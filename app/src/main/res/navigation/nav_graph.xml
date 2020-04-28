@@ -39,5 +39,18 @@
         android:id="@+id/garageFragment"
         android:name="com.example.cats.fragments.garage.GarageFragment"
         android:label="fragment_garage"
-        tools:layout="@layout/fragment_garage" />
+        tools:layout="@layout/fragment_garage" >
+        <action
+            android:id="@+id/action_garageFragment_to_vehicleModificationFragment"
+            app:destination="@id/vehicleModificationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/vehicleModificationFragment"
+        android:name="com.example.cats.fragments.vehicle_modification.VehicleModificationFragment"
+        android:label="fragment_vehicle_modification"
+        tools:layout="@layout/fragment_vehicle_modification" >
+        <action
+            android:id="@+id/action_vehicleModificationFragment_to_garageFragment"
+            app:destination="@id/garageFragment" />
+    </fragment>
 </navigation>

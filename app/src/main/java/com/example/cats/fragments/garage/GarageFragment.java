@@ -4,10 +4,13 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.example.cats.R;
 
@@ -18,6 +21,7 @@ public class GarageFragment extends Fragment {
 
     private View mView;
     private MusicThread musicThread;
+    private BoxTimerThread boxTimerThread;
 
     public GarageFragment() {
         // Required empty public constructor
@@ -32,6 +36,17 @@ public class GarageFragment extends Fragment {
 
         musicThread = new MusicThread(mView.getContext());
         musicThread.start();
+
+        boxTimerThread = new BoxTimerThread((TextView) mView.findViewById(R.id.time));
+        boxTimerThread.start();
+
+        ImageButton vehicle = (ImageButton) mView.findViewById(R.id.vehicle);
+        vehicle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(mView).navigate(R.id.action_garageFragment_to_vehicleModificationFragment);
+            }
+        });
 
         return mView;
     }

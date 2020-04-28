@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@drawable/background_start"
     android:layout_height="match_parent"
     tools:context=".fragments.StartFragment">
     <LinearLayout
@@ -9,12 +10,22 @@
         android:layout_centerInParent="true"
         android:orientation="vertical"
         android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/logo"/>
         <Button
+            android:background="@drawable/material_background"
+            android:textColor="@android:color/white"
+            android:layout_margin="5dp"
             android:id="@+id/choosePlayerButton"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:text="Izberi igraca"/>
         <Button
+            android:layout_margin="5dp"
+            android:background="@drawable/material_background"
+            android:textColor="@android:color/white"
             android:id="@+id/newPlayerButton"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
