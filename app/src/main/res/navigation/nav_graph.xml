@@ -43,6 +43,9 @@
         <action
             android:id="@+id/action_garageFragment_to_vehicleModificationFragment"
             app:destination="@id/vehicleModificationFragment" />
+        <action
+            android:id="@+id/action_garageFragment_to_fightFragment"
+            app:destination="@id/fightFragment" />
     </fragment>
     <fragment
         android:id="@+id/vehicleModificationFragment"
@@ -53,4 +56,9 @@
             android:id="@+id/action_vehicleModificationFragment_to_garageFragment"
             app:destination="@id/garageFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/fightFragment"
+        android:name="com.example.cats.fragments.fight.FightFragment"
+        android:label="fragment_fight"
+        tools:layout="@layout/fragment_fight" />
 </navigation>

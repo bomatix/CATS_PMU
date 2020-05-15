@@ -34,7 +34,7 @@ public class RegisterTask extends AsyncTask<Void, Void, Void> {
         insertedId = db.userDao().addUser(user);
         List<Component> components = db.componentDao().getAll();
         db.userDao().addComponentToInventory(new UserComponent(insertedId, components.get(0).itemId));
-        db.userDao().addComponentToInventory(new UserComponent(insertedId, components.get(6).itemId, true));
+        db.userDao().addComponentToInventory(new UserComponent(insertedId, components.get(8).itemId, true));
         db.userDao().addComponentToInventory(new UserComponent(insertedId, components.get(1).itemId));
         return null;
     }

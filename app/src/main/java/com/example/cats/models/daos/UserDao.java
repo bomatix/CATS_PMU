@@ -23,15 +23,15 @@ public interface UserDao {
 
     @Query("SELECT * FROM user WHERE userId = :userId")
     List<UserWithClosedBoxes> getUserWithClosedBoxes(long userId);
-
-    @Transaction
-    @Query("SELECT uc.itemId FROM usercomponent uc WHERE userId = :userId")
-    List<Long> getUserInventory(long userId);
+//
+//    @Transaction
+//    @Query("SELECT uc.itemId FROM usercomponent uc WHERE userId = :userId")
+//    List<Long> getUserInventory(long userId);
 
 
     @Transaction
     @Query("SELECT c.*, uc.active  FROM component c, usercomponent uc WHERE uc.userId = :userId AND uc.itemId = c.itemId")
-    List<InventoryItem> getUserInventory1(long userId);
+    List<InventoryItem> getUserInventory(long userId);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void addComponentToInventory(UserComponent userComponent);

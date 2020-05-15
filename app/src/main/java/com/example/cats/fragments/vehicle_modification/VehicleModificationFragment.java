@@ -23,6 +23,7 @@ import com.example.cats.viewmodels.AppViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,13 +61,18 @@ public class VehicleModificationFragment extends Fragment {
         (new Thread(new Runnable() {
             @Override
             public void run() {
-//                List<Component> items = mDb.componentDao().getAll();
-//                List<Long> ids = mDb.userDao().getUserInventory(mAppViewModel.getUser().getValue().userId);
-//                List<Component> items = mDb.componentDao().getComponentFromIds(ids);
-                List<InventoryItem> items = mDb.userDao().getUserInventory1(mAppViewModel.getUser().getValue().userId);
+                List<InventoryItem> items = mDb.userDao().getUserInventory(mAppViewModel.getUser().getValue().userId);
                 ItemInfoView itemInfoView = new ItemInfoView(mView.findViewById(R.id.itemInfoView));
                 final Vehicle vehicle = mView.findViewById(R.id.vehicleModification);
-                InventoryItemAdapter adapter = new InventoryItemAdapter(getContext(), items, itemInfoView, vehicle, inventory);
+                vehicle.setDatabase(mDb);
+                vehicle.init(items.stream().filter(item -> item.active == true).collect(Collectors.toList()));
+                InventoryItemAdapter adapter = new InventoryItemAdapter(getContext(),
+                                                                        items.stream().filter(item -> item.active == false).collect(Collectors.toList()),
+                                                                        itemInfoView,
+                                                                        vehicle,
+                                                                        inventory,
+                                                                        mAppViewModel,
+                                                                        mDb);
                 inventory.setAdapter(adapter);
             }
         })).start();

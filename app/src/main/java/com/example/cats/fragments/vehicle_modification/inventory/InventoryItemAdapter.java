@@ -5,6 +5,7 @@ import android.content.ClipDescription;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
+import android.util.Pair;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -14,15 +15,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cats.R;
 import com.example.cats.fragments.vehicle_modification.ItemInfoView;
 import com.example.cats.fragments.vehicle_modification.Slottable;
 import com.example.cats.fragments.vehicle_modification.Vehicle;
+import com.example.cats.models.AppDatabase;
 import com.example.cats.models.entities.Component;
+import com.example.cats.models.entities.UserComponent;
 import com.example.cats.util.Methods;
 import com.example.cats.util.ViewMethods;
+import com.example.cats.viewmodels.AppViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,13 +41,23 @@ public class InventoryItemAdapter extends RecyclerView.Adapter<InventoryItemAdap
     private Context context;
     private Vehicle vehicle;
     private Inventory inventory;
+    private AppViewModel mAppViewModel;
+    private AppDatabase mDb;
 
-    public InventoryItemAdapter(Context context, List<InventoryItem> items, ItemInfoView itemInfoView, Vehicle vehicle, Inventory inventory) {
+    public InventoryItemAdapter(Context context,
+                                List<InventoryItem> items,
+                                ItemInfoView itemInfoView,
+                                Vehicle vehicle,
+                                Inventory inventory,
+                                AppViewModel appViewModel,
+                                AppDatabase appDatabase) {
         this.items = items;
         this.itemInfoView = itemInfoView;
         this.context = context;
         this.vehicle = vehicle;
         this.inventory = inventory;
+        this.mAppViewModel = appViewModel;
+        this.mDb = appDatabase;
     }
 
     private void selectedColor(View v, int position) {
@@ -117,8 +132,26 @@ public class InventoryItemAdapter extends RecyclerView.Adapter<InventoryItemAdap
 
         public boolean tryToFit(InventoryItem item, View view) {
             for(Slottable s: slottables) {
-                if(s.onSlotDrop(context, item, view)) {
+                Pair<Boolean, InventoryItem> result = s.onSlotDrop(context, item, view);
+                if(result.first) {
                     items.remove(item);
+                    (new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            UserComponent uc = new UserComponent(mAppViewModel.getUser().getValue().userId, item.component.itemId, !item.active);
+                            mDb.componentDao().updateUserComponent(uc);
+                        }
+                    })).start();
+                    if(result.second != null) {
+                        items.add(result.second);
+                        (new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                UserComponent uc = new UserComponent(mAppViewModel.getUser().getValue().userId, result.second.component.itemId, !result.second.active);
+                                mDb.componentDao().updateUserComponent(uc);
+                            }
+                        })).start();
+                    }
                     notifyDataSetChanged();
                     return true;
                 }
